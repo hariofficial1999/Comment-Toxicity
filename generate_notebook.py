@@ -1,0 +1,209 @@
+import json
+import os
+
+cells = [
+    # ==================== TITLE ====================
+    {
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "# 🛡️ Comment Toxicity Detection - Deep Learning\n",
+            "**Model:** Bidirectional LSTM | **Output:** 6 Toxicity Classes"
+        ]
+    },
+    
+    # ==================== IMPORTS ====================
+    {
+        "cell_type": "code",
+        "execution_count": None,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "import pandas as pd\n",
+            "import numpy as np\n",
+            "import matplotlib.pyplot as plt\n",
+            "import tensorflow as tf\n",
+            "from tensorflow.keras.layers import TextVectorization, Embedding, LSTM, Bidirectional, Dense, Dropout, GlobalMaxPooling1D\n",
+            "from tensorflow.keras.models import Sequential\n",
+            "from sklearn.model_selection import train_test_split\n",
+            "print(f\"TensorFlow: {tf.__version__}\")"
+        ]
+    },
+    
+    # ==================== LOAD DATA ====================
+    {
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": ["## 1. Load & Explore Data"]
+    },
+    {
+        "cell_type": "code",
+        "execution_count": None,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "df = pd.read_csv('train.csv')\n",
+            "print(f\"Shape: {df.shape}\")\n",
+            "df.head()"
+        ]
+    },
+    {
+        "cell_type": "code",
+        "execution_count": None,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "# Label Distribution\n",
+            "labels = ['toxic', 'severe_toxic', 'obscene', 'threat', 'insult', 'identity_hate']\n",
+            "df[labels].sum().plot(kind='bar', color='steelblue', title='Label Distribution')\n",
+            "plt.savefig('label_distribution.png')\n",
+            "plt.show()"
+        ]
+    },
+    
+    # ==================== PREPROCESSING ====================
+    {
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": ["## 2. Preprocessing"]
+    },
+    {
+        "cell_type": "code",
+        "execution_count": None,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "X = df['comment_text'].values\n",
+            "y = df[labels].values\n",
+            "\n",
+            "X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)\n",
+            "print(f\"Train: {len(X_train)}, Val: {len(X_val)}\")"
+        ]
+    },
+    {
+        "cell_type": "code",
+        "execution_count": None,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "# Text Vectorization\n",
+            "MAX_TOKENS = 200000\n",
+            "SEQ_LEN = 1800\n",
+            "\n",
+            "vectorizer = TextVectorization(max_tokens=MAX_TOKENS, output_sequence_length=SEQ_LEN)\n",
+            "vectorizer.adapt(X_train)\n",
+            "print(f\"Vocab Size: {len(vectorizer.get_vocabulary())}\")"
+        ]
+    },
+    
+    # ==================== MODEL ====================
+    {
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": ["## 3. Build & Train Model"]
+    },
+    {
+        "cell_type": "code",
+        "execution_count": None,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "model = Sequential([\n",
+            "    vectorizer,\n",
+            "    Embedding(MAX_TOKENS + 1, 128),\n",
+            "    Bidirectional(LSTM(64, return_sequences=True)),\n",
+            "    GlobalMaxPooling1D(),\n",
+            "    Dense(256, activation='relu'),\n",
+            "    Dropout(0.3),\n",
+            "    Dense(6, activation='sigmoid')\n",
+            "])\n",
+            "\n",
+            "model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])\n",
+            "model.summary()"
+        ]
+    },
+    {
+        "cell_type": "code",
+        "execution_count": None,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "# Train\n",
+            "history = model.fit(X_train, y_train, epochs=1, batch_size=32, validation_data=(X_val, y_val))"
+        ]
+    },
+    
+    # ==================== EVALUATE ====================
+    {
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": ["## 4. Evaluate & Save"]
+    },
+    {
+        "cell_type": "code",
+        "execution_count": None,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "# Evaluate\n",
+            "loss, acc = model.evaluate(X_val, y_val)\n",
+            "print(f\"\\nVal Loss: {loss:.4f}, Val Accuracy: {acc:.4f}\")"
+        ]
+    },
+    {
+        "cell_type": "code",
+        "execution_count": None,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "# Save Model\n",
+            "model.save('toxicity_model_end_to_end.h5')\n",
+            "\n",
+            "# Save History\n",
+            "import json\n",
+            "with open('training_history.json', 'w') as f:\n",
+            "    json.dump(history.history, f)\n",
+            "\n",
+            "print(\"✅ Model Saved!\")"
+        ]
+    },
+    
+    # ==================== TEST ====================
+    {
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": ["## 5. Test Prediction"]
+    },
+    {
+        "cell_type": "code",
+        "execution_count": None,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "# Test\n",
+            "test_texts = [\"You are amazing!\", \"I hate you, go die!\"]\n",
+            "preds = model.predict(test_texts)\n",
+            "\n",
+            "for text, pred in zip(test_texts, preds):\n",
+            "    print(f\"\\n'{text}'\")\n",
+            "    for label, score in zip(labels, pred):\n",
+            "        print(f\"  {label}: {score:.1%}\")"
+        ]
+    }
+]
+
+notebook = {
+    "cells": cells,
+    "metadata": {
+        "kernelspec": {"display_name": "Python 3", "language": "python", "name": "python3"},
+        "language_info": {"name": "python", "version": "3.8.10"}
+    },
+    "nbformat": 4,
+    "nbformat_minor": 5
+}
+
+out_path = "d:/Intern Project/Comment Toxicity/Project_Notebook.ipynb"
+with open(out_path, "w", encoding='utf-8') as f:
+    json.dump(notebook, f, indent=2)
+
+print(f"✅ Short notebook created: {out_path}")
