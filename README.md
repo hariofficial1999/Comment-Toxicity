@@ -39,7 +39,7 @@ We implemented and compared two high-performance architectures:
 | **Contextual Awareness** | Localized (n-grams) | Global (Sequential dependencies) |
 | **Complexity** | Lower | Higher |
 
-**The Winning Choice:** The **Bidirectional LSTM** was selected because it processes text in both directions (forward and backward), allowing it to capture the subtle context and dependencies between words that simple convolutional filters might miss.
+**The Best Choice:** The **Bidirectional LSTM** was selected because it processes text in both directions (forward and backward), allowing it to capture the subtle context and dependencies between words that simple convolutional filters might miss.
 
 ### 3. Training Strategy
 - **Optimizer:** Adam (Adaptive Moment Estimation) for efficient learning.
@@ -72,4 +72,5 @@ We implemented and compared two high-performance architectures:
 This dashboard translates complex neural network probabilities into actionable safety scores, empowering moderators and community managers to make fast, data-driven decisions to protect online spaces.
 
 ---
-*Created as part of an Intern Project for Comment Toxicity Detection.*
+
+
