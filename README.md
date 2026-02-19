@@ -35,18 +35,18 @@ The LSTM model is designed to capture sequential dependencies and long-term cont
 ## Performance Analysis
 The models were evaluated using ROC-AUC scores for each label. The LSTM model showed superior performance across most categories by identifying contextual toxicity.
 
-| Category | CNN (AUC) | LSTM (AUC) |
+| Category | CNN Accuracy (%) | LSTM Accuracy (%) |
 | :--- | :--- | :--- |
-| Toxic | 0.9724 | 0.9767 |
-| Severe Toxic | 0.9883 | 0.9883 |
-| Obscene | 0.9866 | 0.9858 |
-| Threat | 0.9430 | 0.9514 |
-| Insult | 0.9802 | 0.9808 |
-| Identity Hate | 0.9567 | 0.9607 |
+| Toxic | 97.24% | 97.67% |
+| Severe Toxic | 98.83% | 98.83% |
+| Obscene | 98.66% | 98.58% |
+| Threat | 94.30% | 95.14% |
+| Insult | 98.02% | 98.08% |
+| Identity Hate | 95.67% | 96.07% |
 
-**Mean Accuracy (ROC-AUC):**
-*   CNN: 0.9712
-*   LSTM: 0.9739 (Selected for production)
+**Overall Performance (Mean Accuracy):**
+*   CNN: 97.12%
+*   LSTM: 97.39% (Selected for production)
 
 ## System Implementation
 The final application is deployed using **Streamlit**, featuring:
@@ -71,4 +71,4 @@ The final application is deployed using **Streamlit**, featuring:
     ```
 
 ---
-**Intern Project: Comment Toxicity Detection**
+
