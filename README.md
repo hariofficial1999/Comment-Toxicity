@@ -1,74 +1,75 @@
-# Comment Toxicity Detection using Deep Learning
+# 🛡️ Comment Toxicity Analysis Dashboard
 
-This project implements a multi-label classification system to detect various types of toxicity in online comments. The system is built using deep learning architectures (CNN and LSTM) to automate the identification of harmful content and improve online moderation.
+A professional, deep learning-powered solution for identifying toxic content in online comments. This project leverages state-of-the-art Natural Language Processing (NLP) techniques and Deep Learning architectures to provide real-time toxicity analysis and category-wise risk assessment.
 
-## Project Overview
-The objective is to classify text data into six categories:
-*   **Toxic**
-*   **Severe Toxic**
-*   **Obscene**
-*   **Threat**
-*   **Insult**
-*   **Identity Hate**
+## 🚀 Overview
 
-The application provides a real-time interface for text analysis and a comparison dashboard to review model performance metrics.
+In the age of digital interaction, maintaining a healthy online environment is crucial. This project provides a robust dashboard that classifies user comments into six different categories of toxicity:
+- **Toxic**
+- **Severe Toxic**
+- **Obscene**
+- **Threat**
+- **Insult**
+- **Identity Hate**
 
-## Data Preprocessing
-The following steps were performed to prepare the dataset for model training:
-1.  **Text Cleaning**: Applied regular expressions to remove URLs, special characters, and digits. All text was converted to lowercase.
-2.  **Tokenization**: Used the Keras Tokenizer to map words to integer sequences with a vocabulary limit of 20,000 words.
-3.  **Padding**: Sequences were padded/truncated to a fixed length of 150 tokens to maintain consistent input dimensions.
+The core of this system is a **Bidirectional LSTM (Long Short-Term Memory)** network, which outperformed traditional CNN models during our rigorous benchmarking phase.
 
-## Model Architectures
-Two primary deep learning approaches were evaluated:
+## 📊 Dataset Insight
 
-### 1. Convolutional Neural Network (CNN)
-The CNN model uses 1D convolution layers to extract local features and patterns (n-grams) from the text.
-*   **Structure**: Embedding -> Conv1D -> GlobalMaxPooling1D -> Dense (ReLU) -> Dropout -> Output (Sigmoid).
-*   **Characteristics**: Efficient for keyword detection and pattern matching.
+The models were trained on a large-scale dataset of Wikipedia comments, specifically processed for multi-label classification.
+- **Training Samples:** 159,571 comments
+- **Testing Samples:** 153,164 comments
+- **Class Distribution:** Highly imbalanced data with a significant majority of "Clean" comments (~90%), requiring specialized training strategies.
 
-### 2. Long Short-Term Memory (LSTM)
-The LSTM model is designed to capture sequential dependencies and long-term context within the sentences.
-*   **Structure**: Embedding -> Bidirectional LSTM -> GlobalMaxPooling1D -> Dropout -> Output (Sigmoid).
-*   **Characteristics**: Better at understanding the context and flow of natural language compared to standard CNNs.
+## 🏗️ Technical Architecture
 
-## Performance Analysis
-The models were evaluated using ROC-AUC scores for each label. The LSTM model showed superior performance across most categories by identifying contextual toxicity.
+### 1. Preprocessing Pipeline
+Our pipeline ensures that every comment is cleaned and transformed into a format optimal for deep learning:
+- **Text Cleaning:** Removal of URLs, special characters, and noise using regular expressions.
+- **Tokenization:** Mapping words to a vocabulary of 20,000 unique integers.
+- **Padding:** Standardizing sequence lengths to 150 tokens for consistent model input.
+- **OOV Handling:** Intelligent handling of Out-Of-Vocabulary words.
 
-| Category | CNN Accuracy (%) | LSTM Accuracy (%) |
+### 2. Model Benchmarking (CNN vs. LSTM)
+We implemented and compared two high-performance architectures:
+
+| Metric | CNN Model | LSTM Model (Winner) |
 | :--- | :--- | :--- |
-| Toxic | 97.24% | 97.67% |
-| Severe Toxic | 98.83% | 98.83% |
-| Obscene | 98.66% | 98.58% |
-| Threat | 94.30% | 95.14% |
-| Insult | 98.02% | 98.08% |
-| Identity Hate | 95.67% | 96.07% |
+| **Mean Accuracy** | 0.9712 | **0.9739** |
+| **Contextual Awareness** | Localized (n-grams) | Global (Sequential dependencies) |
+| **Complexity** | Lower | Higher |
 
-**Overall Performance (Mean Accuracy):**
-*   CNN: 97.12%
-*   LSTM: 97.39% (Selected for production)
+**The Winning Choice:** The **Bidirectional LSTM** was selected because it processes text in both directions (forward and backward), allowing it to capture the subtle context and dependencies between words that simple convolutional filters might miss.
 
-## System Implementation
-The final application is deployed using **Streamlit**, featuring:
-*   **Input Analysis**: Real-time classification with probability scores.
-*   **Visualizations**: Bar charts comparing model predictions and category breakdowns.
-*   **Model Comparison**: A technical dashboard showing the training results and architecture details.
+### 3. Training Strategy
+- **Optimizer:** Adam (Adaptive Moment Estimation) for efficient learning.
+- **Loss Function:** Binary Crossentropy (ideal for multi-label tasks).
+- **Regulation:** SpatialDropout1D and EarlyStopping to prevent overfitting and ensure generalization.
 
-## Technical Stack
-*   **Frameworks**: TensorFlow, Keras 3
-*   **Web Framework**: Streamlit
-*   **Libraries**: Pandas, NumPy, Matplotlib, Seaborn
-*   **Tools**: NLTK, Scikit-learn
+## 🛠️ Tech Stack
 
-## Setup and Usage
-1.  Install the required dependencies:
-    ```bash
-    pip install streamlit tensorflow pandas numpy scikit-learn matplotlib seaborn
-    ```
-2.  Run the application:
-    ```bash
-    streamlit run app.py
-    ```
+- **Framework:** [Streamlit](https://streamlit.io/) (for the interactive dashboard)
+- **Deep Learning:** [TensorFlow](https://www.tensorflow.org/) & [Keras](https://keras.io/)
+- **Data Science:** Pandas, NumPy, Scikit-learn
+- **Visualization:** Matplotlib, Seaborn
+- **deployment:** Python 3.x
+
+## 🏁 Getting Started
+
+### Prerequisites
+- Python 3.8+
+- Required libraries listed in `requirements.txt` (or install manually: `streamlit`, `tensorflow`, `pandas`, `numpy`, `matplotlib`, `seaborn`)
+
+### Execution
+1. Clone the repository.
+2. Ensure `best_toxicity_model.h5` (or `lstm_model.keras`) and `tokenizer.pkl` are in the root directory.
+3. Run the application:
+   ```bash
+   streamlit run app.py
+   ```
+
+## 🎯 Project Impact
+This dashboard translates complex neural network probabilities into actionable safety scores, empowering moderators and community managers to make fast, data-driven decisions to protect online spaces.
 
 ---
-
+*Created as part of an Intern Project for Comment Toxicity Detection.*
