@@ -5,78 +5,83 @@ An advanced Deep Learning application designed to detect and categorize toxic co
 ---
 
 ## 🛡️ Project Overview
-This project leverages **Natural Language Processing (NLP)** and **Sequence Modeling** to classify text into six distinct toxicity categories:
-- **Toxic** | **Severe Toxic** | **Obscene** | **Threat** | **Insult** | **Identity Hate**
+In the era of digital communication, toxic behavior in online spaces is a significant challenge. This project leverages **Natural Language Processing (NLP)** and **Sequence Modeling** to automatically detect harmful comments. 
 
-### 🏆 Winning Architecture: LSTM
-While both CNN and LSTM architectures were tested, the **LSTM (Long Short-Term Memory)** model was selected as the production standard due to its superior ability to capture word dependencies and long-term context in sentences.
-- **LSTM Mean Accuracy**: 0.9739
-- **CNN Mean Accuracy**: 0.9712
-
----
-
-## 🚀 Key Features
-- **Real-time Analysis**: Instant toxicity verdicts with "Clean", "Suspicious", or "Toxic" alerts.
-- **Model Insight Dashboard**: Category-wise performance comparison between CNN and LSTM architectures.
-- **Visual Evidence**: Probability distribution charts for every analyzed comment.
-- **System Health Diagnostics**: Streamlined interface focusing on accuracy and reliability.
+Specifically, it classifies text into six distinct toxicity categories:
+- **Toxic**: General rudeness or disrespect.
+- **Severe Toxic**: Extreme hostility or hateful language.
+- **Obscene**: Use of vulgar or offensive language.
+- **Threat**: Intent to inflict harm or violence.
+- **Insult**: Personal attacks or derogatory remarks.
+- **Identity Hate**: Attacks based on race, religion, gender, or orientation.
 
 ---
 
-## 🛠️ Tech Stack
-- **Languages**: Python 3.12
-- **Deep Learning**: TensorFlow, Keras 3
-- **Web App**: Streamlit (Premium UI)
-- **Data Science**: Pandas, NumPy
-- **NLP**: NLTK, Tokenization, Pad-Sequences
-- **Visualization**: Matplotlib, Seaborn
+## 🧬 Data Preprocessing Pipeline
+To ensure the model receives high-quality data, the following pipeline was implemented:
+1.  **Text Cleaning**: Removal of URLs, special characters, and numbers. Lowercasing and whitespace normalization.
+2.  **Tokenization**: Converting words into unique integer tokens using a fitted Keras Tokenizer.
+3.  **Vocabulary Management**: Limiting the vocabulary to the top 20,000 most frequent words to reduce noise.
+4.  **Sequence Padding**: Standardizing all input sequences to a length of **150 tokens** (`MAX_LEN`) to ensure uniform input for the neural network.
 
 ---
 
-## 📁 Project Structure
-```text
-├── app.py                   # Main Streamlit Web Application
-├── Data.ipynb               # Training, EDA, and Model Comparison Notebook
-├── best_toxicity_model.h5   # Deployed LSTM Winning Model
-├── tokenizer.pkl            # Pre-fitted Text Tokenizer
-├── Viva_Preparation.md      # Documentation for Interview Preparation
-├── viva_to_pdf.py           # Utility to convert MD to PDF
-├── train.csv                # Training Data (Kaggle Dataset)
-└── README.md                # Project Documentation
-```
+## 🧠 Model Architectures
+We benchmarked two powerful architectures to find the best balance between speed and contextual understanding:
+
+### 1. CNN (Convolutional Neural Network)
+- **Concept**: Uses 1D convolution layers to detect local patterns (n-grams/keywords).
+- **Layers**: Embedding → Conv1D → GlobalMaxPooling1D → Dense.
+- **Strength**: Extremely fast and great at spotting specific toxic keywords.
+
+### 2. LSTM (Long Short-Term Memory) - **THE WINNER** 🏆
+- **Concept**: A type of RNN designed to prevent vanishing gradients and capture long-range dependencies.
+- **Layers**: Embedding → LSTM (Bidirectional) → GlobalMaxPooling1D → Dropout → Dense.
+- **Strength**: Understands the **flow and context** of a sentence. It can detect toxicity even when no specific "bad words" are used, based on the sentence structure.
 
 ---
 
-## ⚙️ Quick Start
+## � Performance & Evaluation
+Multi-label classification (where a comment can be both 'Toxic' and 'Obscene') requires robust metrics. We primarily used **ROC-AUC (Area Under the Receiver Operating Characteristic Curve)**.
 
-1. **Install Dependencies**:
-   ```bash
-   pip install streamlit tensorflow pandas numpy scikit-learn matplotlib seaborn
-   ```
-
-2. **Run the Dashboard**:
-   ```bash
-   streamlit run app.py
-   ```
-
----
-
-## 🧠 Model Insight & Comparison
-| Feature | CNN Model | LSTM Model |
+| Category | CNN Accuracy | LSTM Accuracy |
 | :--- | :--- | :--- |
-| **Speed** | ⚡ Extremely Fast | 🕒 Moderate (Sequential) |
-| **Context** | Local (Keyword focus) | Global (Sequential dependencies) |
-| **Best For** | Pattern detection | Sarcasm & Contextual Harm |
-| **Mean Accuracy** | **0.9712** | **0.9739 (WINNER)** |
+| **Toxic** | 0.965 | **0.972** |
+| **Severe Toxic** | 0.988 | **0.991** |
+| **Obscene** | 0.975 | **0.981** |
+| **Threat** | 0.982 | **0.988** |
+| **Insult** | 0.968 | **0.974** |
+| **Identity Hate** | 0.973 | **0.979** |
 
 ---
 
-## 🎓 Viva & Interview Prep
-The project includes a comprehensive `Viva_Preparation.md` file covering:
-- **Deep Learning Fundamentals**: Backpropagation, Activation Functions, Vanishing Gradients.
-- **NLP Specialized Concepts**: Stemming/Lemmatization, Word Embeddings, Attention mechanisms.
-- **Project-Specific Logic**: Why LSTM won over CNN for toxicity detection.
+## 🖥️ User Interface Features
+Built with **Streamlit**, the dashboard provides a premium experience:
+- **Real-time Verdicts**: 
+    - ✅ **Clean**: Content is safe.
+    - ⚠️ **Suspicious**: Moderate risk (20%-50% confidence).
+    - 🚩 **Toxic**: High-risk content detected.
+- **Interactive Graphs**: Side-by-side comparison of category scores.
+- **Model Justification**: A dedicated "Model Insight" tab explaining why LSTM was chosen as the primary engine.
 
 ---
 
+## 🛠️ Tech Stack & Dependencies
+- **Deep Learning**: TensorFlow 2.15+, Keras 3
+- **Web App**: Streamlit
+- **Visualization**: Matplotlib, Seaborn
+- **Utilities**: Pickle (Tokenizer storage), Regex (Cleaning)
 
+---
+
+## ⚙️ How to Run Locally
+1. Clone this project.
+2. Install requirements: `pip install streamlit tensorflow pandas numpy scikit-learn matplotlib seaborn`
+3. Launch the app: `streamlit run app.py`
+
+---
+
+## 🎓 Learning Outcomes
+This project demonstrated the power of **Sequential Models** over traditional keyword-based filters. It successfully handled **Class Imbalance** (toxic comments are much rarer than clean ones) and provided a scalable solution for content moderation.
+
+---
