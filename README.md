@@ -1,85 +1,83 @@
-# 🚨 Comment Toxicity Detection
+# 🚨 Toxicity Guard: AI-Powered Comment Moderation
 
-An AI-powered web application that detects and categorizes toxic comments across 6 different labels using Deep Learning. Designed to make online interactions safer by identifying harmful content in real-time.
+An advanced Deep Learning application designed to detect and categorize toxic comments across 6 critical labels. This project provides real-time analysis and detailed model performance insights to ensure safer online communities.
 
 ---
 
-## 🌟 Project Overview
-This project leverages **Natural Language Processing (NLP)** and **Deep Learning** (CNN & LSTM) to classify Wikipedia comments into six toxicity categories:
-- **Toxic**
-- **Severe Toxic**
-- **Obscene**
-- **Threat**
-- **Insult**
-- **Identity Hate**
+## 🛡️ Project Overview
+This project leverages **Natural Language Processing (NLP)** and **Sequence Modeling** to classify text into six distinct toxicity categories:
+- **Toxic** | **Severe Toxic** | **Obscene** | **Threat** | **Insult** | **Identity Hate**
+
+### 🏆 Winning Architecture: LSTM
+While both CNN and LSTM architectures were tested, the **LSTM (Long Short-Term Memory)** model was selected as the production standard due to its superior ability to capture word dependencies and long-term context in sentences.
+- **LSTM Mean Accuracy**: 0.9739
+- **CNN Mean Accuracy**: 0.9712
+
+---
 
 ## 🚀 Key Features
-- **Real-time Interface**: Built with Streamlit for a premium user experience.
-- **Deep Learning Models**: Comparison between **CNN** (for pattern matching) and **LSTM** (for sequence/context).
-- **Interactive Dashboards**: Visual breakdown of toxicity scores using Seaborn and Matplotlib.
-- **Pre-trained Performance**: High AUC scores across all categories.
+- **Real-time Analysis**: Instant toxicity verdicts with "Clean", "Suspicious", or "Toxic" alerts.
+- **Model Insight Dashboard**: Category-wise performance comparison between CNN and LSTM architectures.
+- **Visual Evidence**: Probability distribution charts for every analyzed comment.
+- **System Health Diagnostics**: Streamlined interface focusing on accuracy and reliability.
+
+---
 
 ## 🛠️ Tech Stack
-- **Core**: Python 3.12
+- **Languages**: Python 3.12
 - **Deep Learning**: TensorFlow, Keras 3
-- **Web App**: Streamlit
+- **Web App**: Streamlit (Premium UI)
 - **Data Science**: Pandas, NumPy
+- **NLP**: NLTK, Tokenization, Pad-Sequences
 - **Visualization**: Matplotlib, Seaborn
-- **NLP**: NLTK, Regex
+
+---
 
 ## 📁 Project Structure
 ```text
-├── models/                  # Saved .keras models and tokenizers
-├── Data.ipynb               # Main Training & EDA Notebook
-├── app.py                   # Streamlit Web Application
-├── train.csv                # Training Dataset
-├── test.csv                 # Test Dataset
+├── app.py                   # Main Streamlit Web Application
+├── Data.ipynb               # Training, EDA, and Model Comparison Notebook
+├── best_toxicity_model.h5   # Deployed LSTM Winning Model
+├── tokenizer.pkl            # Pre-fitted Text Tokenizer
+├── Viva_Preparation.md      # Documentation for Interview Preparation
+├── viva_to_pdf.py           # Utility to convert MD to PDF
+├── train.csv                # Training Data (Kaggle Dataset)
 └── README.md                # Project Documentation
 ```
 
-## ⚙️ Installation & Setup
+---
 
-1. **Clone the repository**:
+## ⚙️ Quick Start
+
+1. **Install Dependencies**:
    ```bash
-   git clone https://github.com/your-username/comment-toxicity.git
-   cd comment-toxicity
+   pip install streamlit tensorflow pandas numpy scikit-learn matplotlib seaborn
    ```
 
-2. **Set up Virtual Environment**:
+2. **Run the Dashboard**:
    ```bash
-   python -m venv .venv
-   source .venv/bin/activate  # On Windows use `.venv\Scripts\activate`
+   streamlit run app.py
    ```
 
-3. **Install Dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
+---
 
-4. **Train the Model** (Optional):
-   Open `Data.ipynb` and run all cells to generate the latest `models/cnn_model.keras` and `models/tokenizer.pkl`.
-
-## 🖥️ Running the Application
-Once the models are generated in the `models/` folder, run the Streamlit app:
-```bash
-streamlit run app.py
-```
-
-## 📊 Model Comparison Justification
+## 🧠 Model Insight & Comparison
 | Feature | CNN Model | LSTM Model |
 | :--- | :--- | :--- |
-| **Speed** | Fast | Moderate |
-| **Context** | Local (Words) | Global (Sentence) |
-| **Best For** | Keywords/Patterns | Sarcasm/Slight Harm |
-| **Winner** | **98%+ AUC** | **High Context Accuracy** |
+| **Speed** | ⚡ Extremely Fast | 🕒 Moderate (Sequential) |
+| **Context** | Local (Keyword focus) | Global (Sequential dependencies) |
+| **Best For** | Pattern detection | Sarcasm & Contextual Harm |
+| **Mean Accuracy** | **0.9712** | **0.9739 (WINNER)** |
 
 ---
 
-## 🤝 Contributing
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## 📜 License
-This project is licensed under the MIT License.
+## 🎓 Viva & Interview Prep
+The project includes a comprehensive `Viva_Preparation.md` file covering:
+- **Deep Learning Fundamentals**: Backpropagation, Activation Functions, Vanishing Gradients.
+- **NLP Specialized Concepts**: Stemming/Lemmatization, Word Embeddings, Attention mechanisms.
+- **Project-Specific Logic**: Why LSTM won over CNN for toxicity detection.
 
 ---
-Developed for **Intern Project: Comment Toxicity Detection**.
+
+Developed as an **Intern Project for Comment Toxicity Detection**.  
+*Making the digital world a safer place, one comment at a time.* 🛡️✨
