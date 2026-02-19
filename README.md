@@ -79,5 +79,4 @@ The project includes a comprehensive `Viva_Preparation.md` file covering:
 
 ---
 
-Developed as an **Intern Project for Comment Toxicity Detection**.  
-*Making the digital world a safer place, one comment at a time.* 🛡️✨
+
