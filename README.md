@@ -1,87 +1,74 @@
-# 🚨 Toxicity Guard: AI-Powered Comment Moderation
+# Comment Toxicity Detection using Deep Learning
 
-An advanced Deep Learning application designed to detect and categorize toxic comments across 6 critical labels. This project provides real-time analysis and detailed model performance insights to ensure safer online communities.
+This project implements a multi-label classification system to detect various types of toxicity in online comments. The system is built using deep learning architectures (CNN and LSTM) to automate the identification of harmful content and improve online moderation.
 
----
+## Project Overview
+The objective is to classify text data into six categories:
+*   **Toxic**
+*   **Severe Toxic**
+*   **Obscene**
+*   **Threat**
+*   **Insult**
+*   **Identity Hate**
 
-## 🛡️ Project Overview
-In the era of digital communication, toxic behavior in online spaces is a significant challenge. This project leverages **Natural Language Processing (NLP)** and **Sequence Modeling** to automatically detect harmful comments. 
+The application provides a real-time interface for text analysis and a comparison dashboard to review model performance metrics.
 
-Specifically, it classifies text into six distinct toxicity categories:
-- **Toxic**: General rudeness or disrespect.
-- **Severe Toxic**: Extreme hostility or hateful language.
-- **Obscene**: Use of vulgar or offensive language.
-- **Threat**: Intent to inflict harm or violence.
-- **Insult**: Personal attacks or derogatory remarks.
-- **Identity Hate**: Attacks based on race, religion, gender, or orientation.
+## Data Preprocessing
+The following steps were performed to prepare the dataset for model training:
+1.  **Text Cleaning**: Applied regular expressions to remove URLs, special characters, and digits. All text was converted to lowercase.
+2.  **Tokenization**: Used the Keras Tokenizer to map words to integer sequences with a vocabulary limit of 20,000 words.
+3.  **Padding**: Sequences were padded/truncated to a fixed length of 150 tokens to maintain consistent input dimensions.
 
----
+## Model Architectures
+Two primary deep learning approaches were evaluated:
 
-## 🧬 Data Preprocessing Pipeline
-To ensure the model receives high-quality data, the following pipeline was implemented:
-1.  **Text Cleaning**: Removal of URLs, special characters, and numbers. Lowercasing and whitespace normalization.
-2.  **Tokenization**: Converting words into unique integer tokens using a fitted Keras Tokenizer.
-3.  **Vocabulary Management**: Limiting the vocabulary to the top 20,000 most frequent words to reduce noise.
-4.  **Sequence Padding**: Standardizing all input sequences to a length of **150 tokens** (`MAX_LEN`) to ensure uniform input for the neural network.
+### 1. Convolutional Neural Network (CNN)
+The CNN model uses 1D convolution layers to extract local features and patterns (n-grams) from the text.
+*   **Structure**: Embedding -> Conv1D -> GlobalMaxPooling1D -> Dense (ReLU) -> Dropout -> Output (Sigmoid).
+*   **Characteristics**: Efficient for keyword detection and pattern matching.
 
----
+### 2. Long Short-Term Memory (LSTM)
+The LSTM model is designed to capture sequential dependencies and long-term context within the sentences.
+*   **Structure**: Embedding -> Bidirectional LSTM -> GlobalMaxPooling1D -> Dropout -> Output (Sigmoid).
+*   **Characteristics**: Better at understanding the context and flow of natural language compared to standard CNNs.
 
-## 🧠 Model Architectures
-We benchmarked two powerful architectures to find the best balance between speed and contextual understanding:
+## Performance Analysis
+The models were evaluated using ROC-AUC scores for each label. The LSTM model showed superior performance across most categories by identifying contextual toxicity.
 
-### 1. CNN (Convolutional Neural Network)
-- **Concept**: Uses 1D convolution layers to detect local patterns (n-grams/keywords).
-- **Layers**: Embedding → Conv1D → GlobalMaxPooling1D → Dense.
-- **Strength**: Extremely fast and great at spotting specific toxic keywords.
-
-### 2. LSTM (Long Short-Term Memory) - **THE WINNER** 🏆
-- **Concept**: A type of RNN designed to prevent vanishing gradients and capture long-range dependencies.
-- **Layers**: Embedding → LSTM (Bidirectional) → GlobalMaxPooling1D → Dropout → Dense.
-- **Strength**: Understands the **flow and context** of a sentence. It can detect toxicity even when no specific "bad words" are used, based on the sentence structure.
-
----
-
-## � Performance & Evaluation
-Multi-label classification (where a comment can be both 'Toxic' and 'Obscene') requires robust metrics. We primarily used **ROC-AUC (Area Under the Receiver Operating Characteristic Curve)**.
-
-| Category | CNN Accuracy | LSTM Accuracy |
+| Category | CNN (AUC) | LSTM (AUC) |
 | :--- | :--- | :--- |
-| **Toxic** | 0.965 | **0.972** |
-| **Severe Toxic** | 0.988 | **0.991** |
-| **Obscene** | 0.975 | **0.981** |
-| **Threat** | 0.982 | **0.988** |
-| **Insult** | 0.968 | **0.974** |
-| **Identity Hate** | 0.973 | **0.979** |
+| Toxic | 0.9724 | 0.9767 |
+| Severe Toxic | 0.9883 | 0.9883 |
+| Obscene | 0.9866 | 0.9858 |
+| Threat | 0.9430 | 0.9514 |
+| Insult | 0.9802 | 0.9808 |
+| Identity Hate | 0.9567 | 0.9607 |
+
+**Mean Accuracy (ROC-AUC):**
+*   CNN: 0.9712
+*   LSTM: 0.9739 (Selected for production)
+
+## System Implementation
+The final application is deployed using **Streamlit**, featuring:
+*   **Input Analysis**: Real-time classification with probability scores.
+*   **Visualizations**: Bar charts comparing model predictions and category breakdowns.
+*   **Model Comparison**: A technical dashboard showing the training results and architecture details.
+
+## Technical Stack
+*   **Frameworks**: TensorFlow, Keras 3
+*   **Web Framework**: Streamlit
+*   **Libraries**: Pandas, NumPy, Matplotlib, Seaborn
+*   **Tools**: NLTK, Scikit-learn
+
+## Setup and Usage
+1.  Install the required dependencies:
+    ```bash
+    pip install streamlit tensorflow pandas numpy scikit-learn matplotlib seaborn
+    ```
+2.  Run the application:
+    ```bash
+    streamlit run app.py
+    ```
 
 ---
-
-## 🖥️ User Interface Features
-Built with **Streamlit**, the dashboard provides a premium experience:
-- **Real-time Verdicts**: 
-    - ✅ **Clean**: Content is safe.
-    - ⚠️ **Suspicious**: Moderate risk (20%-50% confidence).
-    - 🚩 **Toxic**: High-risk content detected.
-- **Interactive Graphs**: Side-by-side comparison of category scores.
-- **Model Justification**: A dedicated "Model Insight" tab explaining why LSTM was chosen as the primary engine.
-
----
-
-## 🛠️ Tech Stack & Dependencies
-- **Deep Learning**: TensorFlow 2.15+, Keras 3
-- **Web App**: Streamlit
-- **Visualization**: Matplotlib, Seaborn
-- **Utilities**: Pickle (Tokenizer storage), Regex (Cleaning)
-
----
-
-## ⚙️ How to Run Locally
-1. Clone this project.
-2. Install requirements: `pip install streamlit tensorflow pandas numpy scikit-learn matplotlib seaborn`
-3. Launch the app: `streamlit run app.py`
-
----
-
-## 🎓 Learning Outcomes
-This project demonstrated the power of **Sequential Models** over traditional keyword-based filters. It successfully handled **Class Imbalance** (toxic comments are much rarer than clean ones) and provided a scalable solution for content moderation.
-
----
+**Intern Project: Comment Toxicity Detection**
